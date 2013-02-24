@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 $: << File.dirname(__FILE__)+'/../lib'
-
+require 'rubygems'
 require 'minesweeper/robot'
 require 'minesweeper/game'
 

@@ -2,7 +2,6 @@ require 'minesweeper'
 require 'watir-webdriver'
 require 'nokogiri'
 require 'json'
-require 'securerandom'
 
 class Minesweeper::Game
   BASE_PATH = File.expand_path File.dirname(__FILE__)+'/../../..'
@@ -11,10 +10,10 @@ class Minesweeper::Game
   (0..9).each {|index| MAP[index.to_s] = "mines#{index}"}
 
   URLS = {
-      al: "file:////Users/alscott/Projects/minesweeper.github.com/index.html",
-      local: "file:///#{BASE_PATH}/minesweeper.github.com/index.html",
-      github: "minesweeper.github.com",
-      default: "minesweeper.github.com",
+      :al => "file:////Users/alscott/Projects/minesweeper.github.com/index.html",
+      :local => "file:///#{BASE_PATH}/minesweeper.github.com/index.html",
+      :github => "minesweeper.github.com",
+      :default => "minesweeper.github.com"
   }
 
   URLS_PARAMS = {
@@ -70,8 +69,8 @@ class Minesweeper::Game
 
   def save_screenshot prefix=''
     dir = "#{Dir.getwd}/screenshots/"
-    Dir.mkdir dir unless Dir.exists? dir
-    @browser.driver.save_screenshot "screenshots/#{prefix}#{SecureRandom.uuid}.png"
+    Dir.mkdir dir unless File.exists? dir
+    @browser.driver.save_screenshot "screenshots/#{prefix}#{Time.now.strftime("%Y-%m-%d-%T")}.png"
   end
 
   def won?
@@ -99,10 +98,10 @@ class Minesweeper::Game
   private
 
   def status? status
-    @browser.span(id: 'g1indicator').class_name == status
+    @browser.span(:id => 'g1indicator').class_name == status
   end
 
   def cell row, col
-    @browser.td(id: "g1r#{row}c#{col}")
+    @browser.td(:id => "g1r#{row}c#{col}")
   end
 end
